@@ -4,7 +4,7 @@ const config: CodegenConfig = {
   schema: 'https://spacex-production.up.railway.app/',
   documents: ['src/**/*.tsx'],
   generates: {
-    './lib/__gql__/': {
+    './src/__generated__/': {
       preset: 'client',
       plugins: [],
       presetConfig: {
@@ -12,7 +12,6 @@ const config: CodegenConfig = {
       }
     }
   },
-  
   ignoreNoDocuments: true,
 };
 

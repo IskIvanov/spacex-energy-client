@@ -1,7 +1,7 @@
 // Calculate cosumed rocket energy
 
 export const calculateConsumedRocketEnergy = (
-	rocketMass: number,
+	rocketMass: number ,
 	fuelAmountTonsFirstStage: number,
 	fuelAmountTonsSecondStage: number
   ): number => {
