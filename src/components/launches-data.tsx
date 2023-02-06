@@ -1,31 +1,26 @@
 // Create functional component
 import { useQuery } from "@apollo/client";
 import { gql } from 'src/__generated__/gql';
-import { Grid, CardContent, Card, Typography, Checkbox, CardActions, Button } from '@mui/material';
+import { Grid, CardContent, Card, Typography, Checkbox, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Stack } from "@mui/system";
 import RocketLaunchOutlinedIcon from '@mui/icons-material/RocketLaunchOutlined';
 import ElectricMeterOutlinedIcon from '@mui/icons-material/ElectricMeterOutlined';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import { calculateConsumedRocketEnergy } from "src/utils/utils";
-
-// Done: Query SpaceX Api for launches. You decide which launches to display and whether or not to include filters.
-// Done: Display launch information
-// Done: Allow the user to select multiple launches
-// Done: Display the estimated energy consumption for the selected launches.
-
-
-
+import Link from "next/link";
 
 const GET_SPACEX_LAUNCHES = gql(/* GraphQL */`
   query Query {
   launches {
     id
+	mission_name
     details
+	launch_date_utc
     rocket {
+	  rocket_name
       rocket {
-        name
         mass {
           kg
         }
@@ -55,7 +50,6 @@ export default function LaunchesData() {
 			setSelectedLaunches([...selectedLaunches, id]);
 		}
 	};
-
 
 	const calculateTotalEnergyUsage = (): number => {
 		let totalEnergyUsage = 0;
@@ -92,7 +86,7 @@ export default function LaunchesData() {
 				<Sbutton variant="outlined" color="success" size="small" onClick={calculateTotalEnergyUsage}>Estimated Total Energy</Sbutton>
 				<Typography variant="h4" ><ElectricMeterOutlinedIcon fontSize="large" /> {totalEnergyUsage} Joules/kg </Typography>
 			</Stack>
-			<Typography variant="h3">Select your Rocket</Typography>
+			<SText>Select your Rocket</SText>
 			<Grid container justifyContent='center' marginTop={'3rem'}>
 				{data!.launches?.map((launch) => (
 					<Grid item key={launch?.id}>
@@ -110,9 +104,13 @@ export default function LaunchesData() {
 											console.log('Launch id is undefined');
 									}}
 								/>
-								<Typography>{launch?.rocket?.rocket?.name}</Typography>
-								<Typography>{launch?.details}</Typography>
-								<Typography>{launch?.details}</Typography>
+								<Stack direction={'column'} spacing={'1rem'}>
+									<Typography><b>Mission Name:</b> {launch?.mission_name}</Typography>
+									{launch?.details && <Typography><b>Mission Details:</b> {launch?.details}</Typography>}
+									<Typography><b>Rocket Name:</b> {launch?.rocket?.rocket_name}</Typography>
+									<Typography><b>Cost per launch:</b> {launch?.rocket?.rocket?.cost_per_launch}</Typography>
+									{launch?.rocket?.rocket?.wikipedia && <SLink href={launch?.rocket?.rocket?.wikipedia}> Wiki </SLink>}
+								</Stack>
 							</CardContent>
 						</SItem>
 					</Grid>
@@ -121,6 +119,21 @@ export default function LaunchesData() {
 		</Stack>
 	)
 }
+
+const SText = styled(Typography)(({ theme }) => ({
+	...theme.typography.h4,
+	color: theme.palette.text.secondary,
+	fontWeight: theme.typography.fontWeightBold,
+	display: 'flex',
+	justifyContent: 'center',
+	textDecoration: 'underline',
+}));
+
+const SLink = styled(Link)(({ theme }) => ({
+	...theme.typography.h5,
+	color: theme.palette.text.secondary,
+	fontWeight: theme.typography.fontWeightBold
+}));
 
 const Sbutton = styled(Button)(({ theme }) => ({
 	width: 'fit-content',

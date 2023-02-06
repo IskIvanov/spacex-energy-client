@@ -13,7 +13,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel-plugin for production.
  */
 const documents = {
-    "\n  query Query {\n  launches {\n    id\n    details\n    rocket {\n      rocket {\n        name\n        mass {\n          kg\n        }\n        first_stage {\n          fuel_amount_tons\n        }\n        second_stage {\n          fuel_amount_tons\n        }\n        cost_per_launch\n        wikipedia\n      }\n    }\n  }\n}": types.QueryDocument,
+    "\n  query Query {\n  launches {\n    id\n\tmission_name\n    details\n\tlaunch_date_utc\n    rocket {\n\t  rocket_name\n      rocket {\n        mass {\n          kg\n        }\n        first_stage {\n          fuel_amount_tons\n        }\n        second_stage {\n          fuel_amount_tons\n        }\n        cost_per_launch\n        wikipedia\n      }\n    }\n  }\n}": types.QueryDocument,
 };
 
 /**
@@ -33,7 +33,7 @@ export function gql(source: string): unknown;
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query Query {\n  launches {\n    id\n    details\n    rocket {\n      rocket {\n        name\n        mass {\n          kg\n        }\n        first_stage {\n          fuel_amount_tons\n        }\n        second_stage {\n          fuel_amount_tons\n        }\n        cost_per_launch\n        wikipedia\n      }\n    }\n  }\n}"): (typeof documents)["\n  query Query {\n  launches {\n    id\n    details\n    rocket {\n      rocket {\n        name\n        mass {\n          kg\n        }\n        first_stage {\n          fuel_amount_tons\n        }\n        second_stage {\n          fuel_amount_tons\n        }\n        cost_per_launch\n        wikipedia\n      }\n    }\n  }\n}"];
+export function gql(source: "\n  query Query {\n  launches {\n    id\n\tmission_name\n    details\n\tlaunch_date_utc\n    rocket {\n\t  rocket_name\n      rocket {\n        mass {\n          kg\n        }\n        first_stage {\n          fuel_amount_tons\n        }\n        second_stage {\n          fuel_amount_tons\n        }\n        cost_per_launch\n        wikipedia\n      }\n    }\n  }\n}"): (typeof documents)["\n  query Query {\n  launches {\n    id\n\tmission_name\n    details\n\tlaunch_date_utc\n    rocket {\n\t  rocket_name\n      rocket {\n        mass {\n          kg\n        }\n        first_stage {\n          fuel_amount_tons\n        }\n        second_stage {\n          fuel_amount_tons\n        }\n        cost_per_launch\n        wikipedia\n      }\n    }\n  }\n}"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};
