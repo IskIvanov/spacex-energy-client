@@ -1,5 +1,11 @@
 import Head from "next/head"
-import EnergyView from "src/components/energy-view"
+import LaunchesData from "src/components/launches-data"
+
+/**
+ * 
+ */
+
+// TODO: Create mock user object.
 
 export default function Home() {
 
@@ -20,7 +26,7 @@ export default function Home() {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<h1>SpaceX Energy Client</h1>
-			<EnergyView />
+			<LaunchesData />
 		</>
 	)
 
