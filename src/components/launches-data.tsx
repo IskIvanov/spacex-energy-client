@@ -3,13 +3,27 @@ import { useQuery } from "@apollo/client";
 import { gql } from 'src/__generated__/gql';
 import { Grid, CardContent, Card, Typography, Checkbox, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Stack } from "@mui/system";
 import RocketLaunchOutlinedIcon from '@mui/icons-material/RocketLaunchOutlined';
 import ElectricMeterOutlinedIcon from '@mui/icons-material/ElectricMeterOutlined';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import { calculateConsumedRocketEnergy } from "src/utils/utils";
 import Link from "next/link";
+import useEnergyCalculationHook from "src/hooks/useEnergyCalculator";
+import useEnergyCalculation from "src/hooks/useEnergyCalculator";
+import { Launch } from '../__generated__/graphql';
+
+/**
+ * -  Assume you have access to a `user` object at the top level of your application
+ *  	(retrieved from the auth system ). 
+ * 		Filter out some items from the list based on the user's permissions to view these items.
+ * 		 You are free to mock the `user` object and the `permissions` structure however you see fit.
+ * 
+ * -  Using a data visualization library/framework, compare data from multiple launches in one view.
+ * 	  If you're using a UI library, pick one component you believe you will need and customize it,
+ * 	   visually or in terms of provided functionality.
+ */
 
 const GET_SPACEX_LAUNCHES = gql(/* GraphQL */`
   query Query {
@@ -40,8 +54,14 @@ const GET_SPACEX_LAUNCHES = gql(/* GraphQL */`
 // TODO: Extract logic from component and create custom hook
 export default function LaunchesData() {
 	const { loading, error, data } = useQuery(GET_SPACEX_LAUNCHES);
-	const [selectedLaunches, setSelectedLaunches] = useState<string[]>([]);
-	const [totalEnergyUsage, setTotalEnergyUsage] = useState<number>(0);
+	const [launchesData, setLaunchesData] = useState<Launch[] | any>([]);
+	const { calculateTotalEnergyUsage, totalEnergyUsage, selectedLaunches, setSelectedLaunches } = useEnergyCalculation();
+
+	useEffect(() => {
+		if (data?.launches) {
+			setLaunchesData(data.launches);
+		}
+	}, [data]);
 
 	const handleCheckboxChange = (id: string) => {
 		if (selectedLaunches.includes(id)) {
@@ -51,29 +71,14 @@ export default function LaunchesData() {
 		}
 	};
 
-	const calculateTotalEnergyUsage = (): number => {
-		let totalEnergyUsage = 0;
-		const spaceXLaunches = data?.launches;
+	const handleEnergyUsage = () => {
+		if (data) {
+			calculateTotalEnergyUsage(data);
+		}
+		else {
+			console.log('Data is undefined');
+		}
 
-		spaceXLaunches?.forEach((launch) => {
-
-			const launchId = launch?.id;
-			const rocketMass = launch?.rocket?.rocket?.mass?.kg;
-			const rocketFirstStageFuelAmount = launch?.rocket?.rocket?.first_stage?.fuel_amount_tons;
-			const rocketSecondStageFuelAmount = launch?.rocket?.rocket?.second_stage?.fuel_amount_tons;
-
-			if (launchId && selectedLaunches.includes(launchId)) {
-				if (rocketMass && rocketFirstStageFuelAmount && rocketSecondStageFuelAmount) {
-					totalEnergyUsage += calculateConsumedRocketEnergy(
-						rocketMass,
-						rocketFirstStageFuelAmount,
-						rocketSecondStageFuelAmount,
-					);
-				}
-			}
-		});
-		setTotalEnergyUsage(totalEnergyUsage);
-		return totalEnergyUsage;
 	};
 
 
@@ -83,10 +88,10 @@ export default function LaunchesData() {
 	return (
 		<Stack direction={'column'} spacing={'3rem'}  >
 			<Stack direction={'row'} spacing={'3rem'} justifyContent={'space-around'} >
-				<Sbutton variant="outlined" color="success" size="small" onClick={calculateTotalEnergyUsage}>Estimated Total Energy</Sbutton>
+				<Sbutton variant="outlined" color="success" size="small" onClick={handleEnergyUsage}>Estimated Total Energy</Sbutton>
 				<Typography variant="h4" ><ElectricMeterOutlinedIcon fontSize="large" /> {totalEnergyUsage} Joules/kg </Typography>
 			</Stack>
-			<SText>Select your Rocket</SText>
+			<SText>Select Rockets</SText>
 			<Grid container justifyContent='center' marginTop={'3rem'}>
 				{data!.launches?.map((launch) => (
 					<Grid item key={launch?.id}>
