@@ -51,10 +51,12 @@ export default function Dashboard() {
 	const { calculateTotalEnergyUsage, totalEnergyUsage, selectedLaunches, setSelectedLaunches } = useEnergyCalculation();
 
 	const launches = data?.launches;
-	const recentLaunches = launches ? Array.from(launches).reverse() : [];
+	const sortedLaunches = launches ? Array.from(launches).reverse() : [];
 
 	// @ts-ignore
-	const filteredImageLaunches = recentLaunches.filter((launch: Launch) => launch.links.flickr_images.length > 0);
+	const filteredImageLaunches = sortedLaunches.filter((launch: Launch) => launch.links.flickr_images.length > 0);
+
+	const recentLaunches = filteredImageLaunches.slice(0, 6);
 
 	const handleCheckboxChange = (id: string) => {
 		if (selectedLaunches.includes(id)) {
@@ -80,21 +82,23 @@ export default function Dashboard() {
 		<Stack direction={'column'} spacing={'3rem'}  >
 			<Stack direction={'row'} spacing={'3rem'} justifyContent={'space-around'} >
 				<Sbutton variant="outlined" color="success" size="small" onClick={handleEnergyUsage}>Estimated Total Energy</Sbutton>
-				<Typography variant="h4" ><ElectricMeterOutlinedIcon fontSize="large" /> {totalEnergyUsage} Joules/kg </Typography>
+				<Typography variant="h4" ><ElectricMeterOutlinedIcon fontSize="large" /> {totalEnergyUsage} MJ/kg </Typography>
 			</Stack>
-			<SText>Select Launch</SText>
-			<div style={{ background: 'white' }}>
-				{data && <DataChart data={data} />}
-			</div>
-			{/* <D3LineChart /> */}
+			{data && <DataChart data={data} />}
+			<SText>Select Launches</SText>
 			<Grid container justifyContent='center' marginTop={'3rem'}>
 				{loading && <CircularProgress color='error' />}
 				{/* If user has an Admin role see all Launches */}
-				{user?.role === 'admin' && recentLaunches.map((launch, index) => (
+				{user?.role === 'admin' && sortedLaunches.map((launch, index) => (
 					<LaunchView key={index} launch={launch} handleCheckboxChange={handleCheckboxChange} selectedLaunches={selectedLaunches} />
 				))}
-				{/* If user is User has a user role see only launches with image */}
+				{/* If user has a user role see only launches with image */}
 				{user?.role === 'user' && filteredImageLaunches.map((launch, index) => (
+					<LaunchView key={index} launch={launch} handleCheckboxChange={handleCheckboxChange} selectedLaunches={selectedLaunches} />
+				))}
+
+				{/* If user has a guest role see only limited amount of launches */}
+				{user?.role === 'guest' && recentLaunches.map((launch, index) => (
 					<LaunchView key={index} launch={launch} handleCheckboxChange={handleCheckboxChange} selectedLaunches={selectedLaunches} />
 				))}
 			</Grid>

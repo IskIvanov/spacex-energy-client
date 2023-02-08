@@ -18,6 +18,6 @@ export const calculateConsumedRocketEnergy = (
 	const totalMass = rocketMass + totalFuelMass;
 	const energeticValuePerKg = 1.35 * 10 ** 7;
 
-	return totalMass * energeticValuePerKg;
+	return (totalMass * energeticValuePerKg)/(10 ** 6);
   };
 

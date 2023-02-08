@@ -6,8 +6,9 @@ import { mockUser } from "src/mocks/user";
 import { useState } from "react";
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
-import { Typography } from '@mui/material';
-import { mockAdmin } from '../src/mocks/user';
+import { Button, Typography } from '@mui/material';
+import { mockGuest, mockAdmin } from '../src/mocks/user';
+import { red } from "@mui/material/colors";
 
 export default function Home() {
 	const { login, logout } = useAuth();
@@ -27,6 +28,7 @@ export default function Home() {
 					rel="stylesheet"
 					href="https://fonts.googleapis.com/icon?family=Material+Icons"
 				/>
+				<link rel="stylesheet" href="https://unpkg.com/react-vis/dist/style.css" />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<Stack direction={'row'} justifyContent={'space-between'} margin={'1rem'}>
@@ -39,7 +41,29 @@ export default function Home() {
 					login(mockUser)
 				}} />)}
 			</Stack>
-			{isAuthenticated ? (<Dashboard />) : (<Typography align='center' variant={'h4'}>Please login</Typography>)}
+			{isAuthenticated ? (<Dashboard />) : (
+				<Stack direction={'row'} justifyContent={'center'} spacing={'1rem'}>
+					<Typography align='center' variant={'h5'}>Login as: </Typography>
+
+					<Button variant='outlined' color='primary' sx={{ width: 'fit-content', }}
+						onClick={() => {
+							setIsAuthenticated(true);
+							login(mockGuest)
+						}}>Guest</Button>
+					<Button variant='outlined' color='success' sx={{ width: 'fit-content' }}
+						onClick={() => {
+							setIsAuthenticated(true);
+							login(mockAdmin)
+						}}
+					>Admin</Button>
+					<Button variant='outlined' color='secondary' sx={{ width: 'fit-content' }}
+						onClick={() => {
+							setIsAuthenticated(true);
+							login(mockUser)
+						}}
+					>User</Button>
+				</Stack>
+			)}
 		</>
 	)
 

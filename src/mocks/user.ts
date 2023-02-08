@@ -2,7 +2,7 @@ export type User = {
 	name: string;
 	email: string;
 	isActive: boolean;
-	role: 'admin' | 'user';
+	role: 'admin' | 'user' | 'guest';
   };
 
 export const mockAdmin: User = {
@@ -17,4 +17,11 @@ export const mockUser: User = {
 	email: "Joost@example.com",
 	isActive: true,
 	role: "user",
+  };
+
+export const mockGuest: User = {
+	name: "Joost Nijhuis",
+	email: "Joost@example.com",
+	isActive: true,
+	role: "guest",
   };
