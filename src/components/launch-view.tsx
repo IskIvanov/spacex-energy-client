@@ -1,6 +1,7 @@
 import { Launch } from '../__generated__/graphql';
 import { Card, CardContent, CardMedia, Checkbox, Grid, Link, Stack, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import RedditIcon from '@mui/icons-material/Reddit';
 import RocketLaunchOutlinedIcon from '@mui/icons-material/RocketLaunchOutlined';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 
@@ -38,7 +39,10 @@ export function LaunchView({ launch, handleCheckboxChange, selectedLaunches }: L
 						<Typography><b>Rocket Name:</b> {launch?.rocket?.rocket_name}</Typography>
 						<Typography><b>Cost per launch:</b> {launch?.rocket?.rocket?.cost_per_launch}</Typography>
 						<Typography><b>Data Launched:</b> {new Date(launch.launch_date_local).toLocaleDateString()}</Typography>
-						{launch?.rocket?.rocket?.wikipedia && <SLink href={launch?.rocket?.rocket?.wikipedia}> Wiki </SLink>}
+						<Stack direction={'row'} spacing={'1rem'} justifyContent={'center'}>
+							{launch?.links?.wikipedia && <SLink href={launch?.links?.wikipedia}> Wiki </SLink>}
+							{launch?.links?.reddit_campaign && <Link color={'inherit'} href={launch?.links?.reddit_campaign}><RedditIcon fontSize='large' /></Link>}
+						</Stack>
 					</Stack>
 				</CardContent>
 			</SItem>

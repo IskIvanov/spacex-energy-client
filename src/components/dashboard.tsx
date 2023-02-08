@@ -46,7 +46,6 @@ const GET_SPACEX_LAUNCHES = gql(/* GraphQL */`
     }
 	links {
 		flickr_images
-		video_link
 		reddit_campaign
 		wikipedia
 		video_link
@@ -92,7 +91,7 @@ export default function Dashboard() {
 				<Sbutton variant="outlined" color="success" size="small" onClick={handleEnergyUsage}>Estimated Total Energy</Sbutton>
 				<Typography variant="h4" ><ElectricMeterOutlinedIcon fontSize="large" /> {totalEnergyUsage} Joules/kg </Typography>
 			</Stack>
-			<SText>Select Rockets</SText>
+			<SText>Select Launch</SText>
 			<Grid container justifyContent='center' marginTop={'3rem'}>
 				{loading && <CircularProgress color='error' />}
 				{/* If user has an Admin role see all Launches */}
