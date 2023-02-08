@@ -1,7 +1,15 @@
 import Head from "next/head"
 import Dashboard from "src/components/dashboard"
+import useAuth from "src/hooks/useAuth";
+import { Stack } from '@mui/system';
+import { mockUser, mockAdmin } from "src/mocks/user";
+import { useState } from "react";
+import LockIcon from '@mui/icons-material/Lock';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
 
 export default function Home() {
+	const { login, logout } = useAuth();
+	const [isAuthenticated, setIsAuthenticated] = useState(false);
 
 	return (
 		<>
@@ -19,8 +27,17 @@ export default function Home() {
 				/>
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-			<h1>SpaceX Energy Client</h1>
-			<Dashboard />
+			<Stack direction={'row'} justifyContent={'space-between'}>
+				<h1>SpaceX Energy Client</h1>
+				{isAuthenticated ? (<LockOpenIcon fontSize='large' onClick={() => {
+					setIsAuthenticated(!isAuthenticated);
+					logout
+				}} />) : (<LockIcon fontSize='large' onClick={() => {
+					setIsAuthenticated(!isAuthenticated);
+					login(mockUser)
+				}} />)}
+			</Stack>
+			{isAuthenticated ? (<Dashboard />) : (<h2>Please login</h2>)}
 		</>
 	)
 

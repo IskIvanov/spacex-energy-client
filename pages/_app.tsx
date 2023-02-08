@@ -4,6 +4,7 @@ import { ApolloProvider } from '@apollo/client';
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import client from '../src/services/apollo-client';
+import { AuthProvider } from 'src/contexts/auth-provider';
 
 // Add dark mode to the theme provider
 const theme = createTheme({
@@ -16,8 +17,10 @@ export default function SpaceXEnergyClient({ Component, pageProps }: AppProps) {
 	return (
 		<ApolloProvider client={client} >
 			<ThemeProvider theme={theme}>
-				<CssBaseline />
-				<Component {...pageProps} />
+				<AuthProvider>
+					<CssBaseline />
+					<Component {...pageProps} />
+				</AuthProvider>
 			</ThemeProvider>
 		</ApolloProvider>
 	)

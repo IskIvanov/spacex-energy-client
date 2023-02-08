@@ -7,6 +7,7 @@ import { Stack } from "@mui/system";
 import ElectricMeterOutlinedIcon from '@mui/icons-material/ElectricMeterOutlined';
 import useEnergyCalculation from "src/hooks/useEnergyCalculator";
 import { LaunchView } from "./launch-view";
+import useAuth from "src/hooks/useAuth";
 
 /**
  * -  Assume you have access to a `user` object at the top level of your application
@@ -47,6 +48,7 @@ const GET_SPACEX_LAUNCHES = gql(/* GraphQL */`
 
 // TODO: Extract logic from component and create custom hook
 export default function Dashboard() {
+	const { user } = useAuth();
 	const { loading, error, data } = useQuery(GET_SPACEX_LAUNCHES);
 	const { calculateTotalEnergyUsage, totalEnergyUsage, selectedLaunches, setSelectedLaunches } = useEnergyCalculation();
 
@@ -67,6 +69,8 @@ export default function Dashboard() {
 		}
 
 	};
+
+	console.log(user);
 
 	if (error) return <p>Error : {error.message}</p>;
 
