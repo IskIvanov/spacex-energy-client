@@ -7,7 +7,9 @@ import { Stack } from "@mui/system";
 import ElectricMeterOutlinedIcon from '@mui/icons-material/ElectricMeterOutlined';
 import useEnergyCalculation from "src/hooks/useEnergyCalculator";
 import { LaunchView } from "./launch-view";
-import useAuth from "src/hooks/useAuth";
+import { useEffect } from 'react';
+import { Launch } from "src/__generated__/graphql";
+
 
 /**
  * -  Assume you have access to a `user` object at the top level of your application
@@ -26,7 +28,7 @@ const GET_SPACEX_LAUNCHES = gql(/* GraphQL */`
     id
 	mission_name
     details
-	launch_date_utc
+	launch_date_local
     rocket {
 	  rocket_name
       rocket {
@@ -40,17 +42,25 @@ const GET_SPACEX_LAUNCHES = gql(/* GraphQL */`
           fuel_amount_tons
         }
         cost_per_launch
-        wikipedia
       }
     }
+	links {
+		flickr_images
+		video_link
+		reddit_campaign
+		wikipedia
+		video_link
+	}
   }
 }`);
 
 // TODO: Extract logic from component and create custom hook
 export default function Dashboard() {
-	const { user } = useAuth();
 	const { loading, error, data } = useQuery(GET_SPACEX_LAUNCHES);
 	const { calculateTotalEnergyUsage, totalEnergyUsage, selectedLaunches, setSelectedLaunches } = useEnergyCalculation();
+
+	const launches = data?.launches;
+	const recentLaunches = launches ? Array.from(launches).reverse() : [];
 
 	const handleCheckboxChange = (id: string) => {
 		if (selectedLaunches.includes(id)) {
@@ -70,8 +80,6 @@ export default function Dashboard() {
 
 	};
 
-	console.log(user);
-
 	if (error) return <p>Error : {error.message}</p>;
 
 	return (
@@ -83,7 +91,7 @@ export default function Dashboard() {
 			<SText>Select Rockets</SText>
 			<Grid container justifyContent='center' marginTop={'3rem'}>
 				{loading && <CircularProgress color='error' />}
-				{data && data.launches?.map((launch, index) => (
+				{recentLaunches.map((launch, index) => (
 					<LaunchView key={index} launch={launch} handleCheckboxChange={handleCheckboxChange} selectedLaunches={selectedLaunches} />
 				))}
 			</Grid>

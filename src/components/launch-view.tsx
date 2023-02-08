@@ -1,5 +1,5 @@
 import { Launch } from '../__generated__/graphql';
-import { Card, CardContent, Checkbox, Grid, Link, Stack, Typography } from '@mui/material';
+import { Card, CardContent, CardMedia, Checkbox, Grid, Link, Stack, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import RocketLaunchOutlinedIcon from '@mui/icons-material/RocketLaunchOutlined';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
@@ -11,12 +11,14 @@ type LaunchesViewProps = {
 }
 
 export function LaunchView({ launch, handleCheckboxChange, selectedLaunches }: LaunchesViewProps) {
+	const missionImage = launch?.links?.flickr_images
 
 	if (!launch) return null;
 
 	return (
 		<Grid item key={launch.id}>
 			<SItem >
+				{missionImage && missionImage?.length > 0 && <CardMedia component='img' height='194' src={missionImage[0] || ''} alt='Mission Image' />}
 				<CardContent>
 					<Checkbox
 						icon={<RocketLaunchOutlinedIcon fontSize="large" />}
@@ -32,9 +34,10 @@ export function LaunchView({ launch, handleCheckboxChange, selectedLaunches }: L
 					/>
 					<Stack direction={'column'} spacing={'1rem'}>
 						<Typography><b>Mission Name:</b> {launch?.mission_name}</Typography>
-						{launch?.details && <Typography><b>Mission Details:</b> {launch?.details}</Typography>}
+						{/* {launch?.details && <Typography><b>Mission Details:</b> {launch?.details}</Typography>} */}
 						<Typography><b>Rocket Name:</b> {launch?.rocket?.rocket_name}</Typography>
 						<Typography><b>Cost per launch:</b> {launch?.rocket?.rocket?.cost_per_launch}</Typography>
+						<Typography><b>Data Launched:</b> {new Date(launch.launch_date_local).toLocaleDateString()}</Typography>
 						{launch?.rocket?.rocket?.wikipedia && <SLink href={launch?.rocket?.rocket?.wikipedia}> Wiki </SLink>}
 					</Stack>
 				</CardContent>

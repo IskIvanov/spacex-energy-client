@@ -2,10 +2,11 @@ import Head from "next/head"
 import Dashboard from "src/components/dashboard"
 import useAuth from "src/hooks/useAuth";
 import { Stack } from '@mui/system';
-import { mockUser, mockAdmin } from "src/mocks/user";
+import { mockUser } from "src/mocks/user";
 import { useState } from "react";
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
+import { Typography } from '@mui/material';
 
 export default function Home() {
 	const { login, logout } = useAuth();
@@ -27,8 +28,8 @@ export default function Home() {
 				/>
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-			<Stack direction={'row'} justifyContent={'space-between'}>
-				<h1>SpaceX Energy Client</h1>
+			<Stack direction={'row'} justifyContent={'space-between'} margin={'1rem'}>
+				<Typography variant='h4' sx={{ margin: '1rem 3rem 1rem 5rem' }}>SpaceX Energy Client</Typography>
 				{isAuthenticated ? (<LockOpenIcon fontSize='large' onClick={() => {
 					setIsAuthenticated(!isAuthenticated);
 					logout
@@ -37,7 +38,7 @@ export default function Home() {
 					login(mockUser)
 				}} />)}
 			</Stack>
-			{isAuthenticated ? (<Dashboard />) : (<h2>Please login</h2>)}
+			{isAuthenticated ? (<Dashboard />) : (<Typography align='center' variant={'h4'}>Please login</Typography>)}
 		</>
 	)
 
