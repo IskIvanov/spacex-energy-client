@@ -1,4 +1,3 @@
-// Create functional component
 import { useQuery } from "@apollo/client";
 import { gql } from 'src/__generated__/gql';
 import { Grid, Typography, Button, CircularProgress } from '@mui/material';
@@ -41,9 +40,6 @@ const GET_SPACEX_LAUNCHES = gql(/* GraphQL */`
 	}
   }
 }`);
-
-// TODO: Extract logic from component and create custom hook
-// TODO: Fix TS
 
 export default function Dashboard() {
 	const { user } = useAuth();

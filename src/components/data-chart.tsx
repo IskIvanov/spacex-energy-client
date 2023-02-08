@@ -4,7 +4,7 @@ import { calculateConsumedRocketEnergy } from 'src/utils/utils';
 import { QueryQuery } from '../__generated__/graphql';
 import { Box, styled, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import { green, grey, red } from '@mui/material/colors';
+import { green, grey } from '@mui/material/colors';
 
 type DataChartProprs = {
 	data: QueryQuery
@@ -16,7 +16,7 @@ export default function DataChart({ data }: DataChartProprs) {
 	const [lineData, setLineData] = useState<any>()
 
 	useEffect(() => {
-		const processedData = data?.launches?.map((launch, index) => ({
+		const processedData = data?.launches?.map((launch) => ({
 			x: new Date(launch?.launch_date_local).getTime(),
 			y: calculateConsumedRocketEnergy(
 				// @ts-ignore
@@ -30,12 +30,8 @@ export default function DataChart({ data }: DataChartProprs) {
 		setLineData(processedData);
 	}, [data]);
 
-
-	console.log(lineData);
-
 	return (
 		<>
-
 			<Stack flexDirection={'row'} justifyContent={'center'}>
 				<SBox>
 					<Typography variant='body2' margin={'0.3rem 1rem 0 1rem'}>Estimated energy consumed by Space X</Typography>
@@ -44,7 +40,6 @@ export default function DataChart({ data }: DataChartProprs) {
 							left: 35,
 							bottom: 80
 						}}>
-						{/* <HorizontalGridLines /> */}
 						<XAxis
 							title='Date'
 							attr="x"

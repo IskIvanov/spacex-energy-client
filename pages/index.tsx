@@ -8,7 +8,6 @@ import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import { Button, Typography } from '@mui/material';
 import { mockGuest, mockAdmin } from '../src/mocks/user';
-import { red } from "@mui/material/colors";
 
 export default function Home() {
 	const { login, logout } = useAuth();

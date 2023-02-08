@@ -1,4 +1,3 @@
-// import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import { ApolloProvider } from '@apollo/client';
 import { CssBaseline } from '@mui/material';
@@ -6,7 +5,6 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import client from '../src/services/apollo-client';
 import { AuthProvider } from 'src/contexts/auth-provider';
 
-// Add dark mode to the theme provider
 const theme = createTheme({
 	palette: {
 		mode: 'dark',

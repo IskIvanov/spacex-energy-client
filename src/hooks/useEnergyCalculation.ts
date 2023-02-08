@@ -5,7 +5,6 @@ import { Launch, QueryQuery } from '../__generated__/graphql';
 /**
  * This hook is responsible for calculating the total energy usage of the selected launches.
  * It also keeps track of the selected launches.
- * @returns {object} - The total energy usage, the selected launches and a function to set the selected launches.
 */
 
 export default function useEnergyCalculation() {

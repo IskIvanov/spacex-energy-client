@@ -20,8 +20,8 @@ export const mockUser: User = {
   };
 
 export const mockGuest: User = {
-	name: "Joost Nijhuis",
-	email: "Joost@example.com",
+	name: "I.I. Guest",
+	email: "ii@example.com",
 	isActive: true,
 	role: "guest",
   };

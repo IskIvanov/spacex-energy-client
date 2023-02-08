@@ -1,4 +1,3 @@
-// Crate auth provider that has two functions: login and logout 
 import { User } from '../mocks/user';
 import { createContext, useState, ReactNode } from 'react';
 
