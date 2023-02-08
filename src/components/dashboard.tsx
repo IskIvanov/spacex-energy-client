@@ -5,22 +5,11 @@ import { Grid, Typography, Button, CircularProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Stack } from "@mui/system";
 import ElectricMeterOutlinedIcon from '@mui/icons-material/ElectricMeterOutlined';
-import useEnergyCalculation from "src/hooks/useEnergyCalculator";
+import useEnergyCalculation from "src/hooks/useEnergyCalculation";
 import { LaunchView } from "./launch-view";
 import { Launch } from "src/__generated__/graphql";
 import useAuth from "src/hooks/useAuth";
-
-
-/**
- * -  Assume you have access to a `user` object at the top level of your application
- *  	(retrieved from the auth system ). 
- * 		Filter out some items from the list based on the user's permissions to view these items.
- * 		 You are free to mock the `user` object and the `permissions` structure however you see fit.
- * 
- * -  Using a data visualization library/framework, compare data from multiple launches in one view.
- * 	  If you're using a UI library, pick one component you believe you will need and customize it,
- * 	   visually or in terms of provided functionality.
- */
+import DataChart from "./data-chart";
 
 const GET_SPACEX_LAUNCHES = gql(/* GraphQL */`
   query Query {
@@ -54,6 +43,8 @@ const GET_SPACEX_LAUNCHES = gql(/* GraphQL */`
 }`);
 
 // TODO: Extract logic from component and create custom hook
+// TODO: Fix TS
+
 export default function Dashboard() {
 	const { user } = useAuth();
 	const { loading, error, data } = useQuery(GET_SPACEX_LAUNCHES);
@@ -92,6 +83,10 @@ export default function Dashboard() {
 				<Typography variant="h4" ><ElectricMeterOutlinedIcon fontSize="large" /> {totalEnergyUsage} Joules/kg </Typography>
 			</Stack>
 			<SText>Select Launch</SText>
+			<div style={{ background: 'white' }}>
+				{data && <DataChart data={data} />}
+			</div>
+			{/* <D3LineChart /> */}
 			<Grid container justifyContent='center' marginTop={'3rem'}>
 				{loading && <CircularProgress color='error' />}
 				{/* If user has an Admin role see all Launches */}
