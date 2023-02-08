@@ -4,6 +4,13 @@ This is a small React project that uses the SpaceX API to display information ab
 
 ---
 
+
+## Demo
+
+https://user-images.githubusercontent.com/28646980/217014205-8282c819-033f-4f96-9279-2ae9946663aa.mov
+
+https://x3t9m6-3000.preview.csb.app/
+
 ## Getting Started
 
 ```bash
