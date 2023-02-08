@@ -7,6 +7,7 @@ import { useState } from "react";
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import { Typography } from '@mui/material';
+import { mockAdmin } from '../src/mocks/user';
 
 export default function Home() {
 	const { login, logout } = useAuth();

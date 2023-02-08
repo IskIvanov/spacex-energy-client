@@ -7,8 +7,8 @@ import { Stack } from "@mui/system";
 import ElectricMeterOutlinedIcon from '@mui/icons-material/ElectricMeterOutlined';
 import useEnergyCalculation from "src/hooks/useEnergyCalculator";
 import { LaunchView } from "./launch-view";
-import { useEffect } from 'react';
 import { Launch } from "src/__generated__/graphql";
+import useAuth from "src/hooks/useAuth";
 
 
 /**
@@ -56,11 +56,15 @@ const GET_SPACEX_LAUNCHES = gql(/* GraphQL */`
 
 // TODO: Extract logic from component and create custom hook
 export default function Dashboard() {
+	const { user } = useAuth();
 	const { loading, error, data } = useQuery(GET_SPACEX_LAUNCHES);
 	const { calculateTotalEnergyUsage, totalEnergyUsage, selectedLaunches, setSelectedLaunches } = useEnergyCalculation();
 
 	const launches = data?.launches;
 	const recentLaunches = launches ? Array.from(launches).reverse() : [];
+
+	// @ts-ignore
+	const filteredImageLaunches = recentLaunches.filter((launch: Launch) => launch.links.flickr_images.length > 0);
 
 	const handleCheckboxChange = (id: string) => {
 		if (selectedLaunches.includes(id)) {
@@ -91,7 +95,12 @@ export default function Dashboard() {
 			<SText>Select Rockets</SText>
 			<Grid container justifyContent='center' marginTop={'3rem'}>
 				{loading && <CircularProgress color='error' />}
-				{recentLaunches.map((launch, index) => (
+				{/* If user has an Admin role see all Launches */}
+				{user?.role === 'admin' && recentLaunches.map((launch, index) => (
+					<LaunchView key={index} launch={launch} handleCheckboxChange={handleCheckboxChange} selectedLaunches={selectedLaunches} />
+				))}
+				{/* If user is User has a user role see only launches with image */}
+				{user?.role === 'user' && filteredImageLaunches.map((launch, index) => (
 					<LaunchView key={index} launch={launch} handleCheckboxChange={handleCheckboxChange} selectedLaunches={selectedLaunches} />
 				))}
 			</Grid>
