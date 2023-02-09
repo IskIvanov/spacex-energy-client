@@ -10,7 +10,6 @@ type DataChartProprs = {
 	data: QueryQuery
 };
 
-// TODO: Fix TS
 
 export default function DataChart({ data }: DataChartProprs) {
 	const [lineData, setLineData] = useState<any>()
@@ -26,7 +25,6 @@ export default function DataChart({ data }: DataChartProprs) {
 				// @ts-ignore
 				launch?.rocket.rocket?.second_stage.fuel_amount_tons) / (10 ** 6)
 		}));
-
 		setLineData(processedData);
 	}, [data]);
 
@@ -49,7 +47,7 @@ export default function DataChart({ data }: DataChartProprs) {
 							tickFormat={function tickFormat(d) { return new Date(d).toLocaleDateString() }}
 						/>
 						<YAxis
-							title='(TJ/kg)'
+							title='(TJ)'
 							attr="y"
 							attrAxis="x"
 							orientation="left"

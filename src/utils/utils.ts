@@ -12,9 +12,7 @@ export const calculateConsumedRocketEnergy = (
 	fuelAmountTonsSecondStage: number
   ): number => {
 	
-	const kgPerTon = 1000;
-	const totalFuelMass =
-	  (fuelAmountTonsFirstStage + fuelAmountTonsSecondStage) * kgPerTon;
+	const totalFuelMass = 1000 * (fuelAmountTonsFirstStage + fuelAmountTonsSecondStage);
 	const totalMass = rocketMass + totalFuelMass;
 	const energeticValuePerKg = 1.35 * 10 ** 7;
 

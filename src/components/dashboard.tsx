@@ -48,7 +48,6 @@ export default function Dashboard() {
 
 	const launches = data?.launches;
 	const sortedLaunches = launches ? Array.from(launches).reverse() : [];
-
 	// @ts-ignore
 	const filteredImageLaunches = sortedLaunches.filter((launch: Launch) => launch.links.flickr_images.length > 0);
 
@@ -78,7 +77,7 @@ export default function Dashboard() {
 		<Stack direction={'column'} spacing={'3rem'}  >
 			<Stack direction={'row'} spacing={'3rem'} justifyContent={'space-around'} >
 				<Sbutton variant="outlined" color="success" size="small" onClick={handleEnergyUsage}>Estimated Total Energy</Sbutton>
-				<Typography variant="h4" ><ElectricMeterOutlinedIcon fontSize="large" /> {totalEnergyUsage} MJ/kg </Typography>
+				<Typography variant="h4" ><ElectricMeterOutlinedIcon fontSize="large" /> {totalEnergyUsage} MJ </Typography>
 			</Stack>
 			{data && <DataChart data={data} />}
 			<SText>Select Launches</SText>
