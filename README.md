@@ -2,19 +2,6 @@
 ## Introduction
 This is a small React project that uses the SpaceX API to display information about their launches. The goal is to calculate the estimated total energy that is consumed by the selected launches and display the result to the end user.
 
-## Features
-- Input a GitHub repository URL and view basic repository information
-- View and move active branches between three columns: "In Progress", "Ready for Review", and "Ready to Merge"
-- State of the kanban is persisted locally in the browser
-- Switch bewtween light and dark theme
-
-## Technology Stack
-- React
-- TypeScript
-- GitHub API
-- Material UI
-
-
 ## Demo
 
 https://user-images.githubusercontent.com/28646980/217786840-f33486f0-c68a-43a7-80b6-dd3cc3ff9619.mov
