@@ -10,7 +10,6 @@ const theme = createTheme({
 		mode: 'dark',
 	},
 });
-
 export default function SpaceXEnergyClient({ Component, pageProps }: AppProps) {
 	return (
 		<ApolloProvider client={client} >

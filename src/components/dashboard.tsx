@@ -40,7 +40,7 @@ const GET_SPACEX_LAUNCHES = gql(/* GraphQL */`
 	}
   }
 }`);
-
+// This is the main component for the dashboard page it shows the launches and the energy usage
 export default function Dashboard() {
 	const { user } = useAuth();
 	const { loading, error, data } = useQuery(GET_SPACEX_LAUNCHES);
@@ -48,9 +48,7 @@ export default function Dashboard() {
 
 	const launches = data?.launches;
 	const sortedLaunches = launches ? Array.from(launches).reverse() : [];
-	// @ts-ignore
-	const filteredImageLaunches = sortedLaunches.filter((launch: Launch) => launch.links.flickr_images.length > 0);
-
+	const filteredImageLaunches = sortedLaunches.filter((launch: Launch | null) => launch?.links?.flickr_images && launch.links.flickr_images.length > 0);
 	const recentLaunches = filteredImageLaunches.slice(0, 6);
 
 	const handleCheckboxChange = (id: string) => {
@@ -85,16 +83,16 @@ export default function Dashboard() {
 				{loading && <CircularProgress color='error' />}
 				{/* If user has an Admin role see all Launches */}
 				{user?.role === 'admin' && sortedLaunches.map((launch, index) => (
-					<LaunchView key={index} launch={launch} handleCheckboxChange={handleCheckboxChange} selectedLaunches={selectedLaunches} />
+					<LaunchView key={index} launchData={launch} handleCheckboxChange={handleCheckboxChange} selectedLaunches={selectedLaunches} />
 				))}
 				{/* If user has a user role see only launches with image */}
 				{user?.role === 'user' && filteredImageLaunches.map((launch, index) => (
-					<LaunchView key={index} launch={launch} handleCheckboxChange={handleCheckboxChange} selectedLaunches={selectedLaunches} />
+					<LaunchView key={index} launchData={launch} handleCheckboxChange={handleCheckboxChange} selectedLaunches={selectedLaunches} />
 				))}
 
 				{/* If user has a guest role see only limited amount of launches */}
 				{user?.role === 'guest' && recentLaunches.map((launch, index) => (
-					<LaunchView key={index} launch={launch} handleCheckboxChange={handleCheckboxChange} selectedLaunches={selectedLaunches} />
+					<LaunchView key={index} launchData={launch} handleCheckboxChange={handleCheckboxChange} selectedLaunches={selectedLaunches} />
 				))}
 			</Grid>
 		</Stack>

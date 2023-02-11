@@ -10,7 +10,7 @@ import { Launch, QueryQuery } from '../__generated__/graphql';
 export default function useEnergyCalculation() {
 	const [totalEnergyUsage, setTotalEnergyUsage] = useState<number>(0);
 	const [selectedLaunches, setSelectedLaunches] = useState<string[]>([]);
-
+	
 	const calculateTotalEnergyUsage = (data: QueryQuery): number => {
 		let totalEnergyUsage = 0;
 		const spaceXLaunches = data.launches as Launch[];

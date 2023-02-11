@@ -1,10 +1,11 @@
-import { XYPlot, XAxis, YAxis, LineSeries, AreaSeries, VerticalBarSeries } from 'react-vis';
+import { XYPlot, XAxis, YAxis, LineSeries, AreaSeries } from 'react-vis';
 import { useState, useEffect } from 'react';
 import { calculateConsumedRocketEnergy } from 'src/utils/utils';
 import { QueryQuery } from '../__generated__/graphql';
 import { Box, styled, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { green, grey } from '@mui/material/colors';
+import useEnergyCalculation from 'src/hooks/useEnergyCalculation';
 
 type DataChartProprs = {
 	data: QueryQuery
@@ -14,17 +15,28 @@ type DataChartProprs = {
 export default function DataChart({ data }: DataChartProprs) {
 	const [lineData, setLineData] = useState<any>()
 
+	const { selectedLaunches } = useEnergyCalculation();
+
 	useEffect(() => {
-		const processedData = data?.launches?.map((launch) => ({
-			x: new Date(launch?.launch_date_local).getTime(),
-			y: calculateConsumedRocketEnergy(
-				// @ts-ignore
-				launch?.rocket.rocket?.mass.kg,
-				// @ts-ignore
-				launch?.rocket.rocket?.first_stage.fuel_amount_tons,
-				// @ts-ignore
-				launch?.rocket.rocket?.second_stage.fuel_amount_tons) / (10 ** 6)
-		}));
+		const processedData = data?.launches?.map((launch) => {
+			// Launches without a rocket are not included in the chart
+			if (launch?.rocket) {
+				const rocketMass = launch.rocket.rocket?.mass?.kg || 0;
+				const fuelFirstStage = launch.rocket.rocket?.first_stage?.fuel_amount_tons || 0;
+				const fuelSecondStage = launch.rocket.rocket?.second_stage?.fuel_amount_tons || 0;
+				return {
+					x: new Date(launch?.launch_date_local).getTime(),
+					y: calculateConsumedRocketEnergy(
+						rocketMass,
+						fuelFirstStage,
+						fuelSecondStage,
+					)
+				}
+			} else {
+				return null;
+			}
+
+		});
 		setLineData(processedData);
 	}, [data]);
 

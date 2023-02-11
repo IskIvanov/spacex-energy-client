@@ -7,19 +7,28 @@ import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import useAuth from 'src/hooks/useAuth';
 
 type LaunchesViewProps = {
-	launch: Launch | null;
+	launchData: Launch | null;
 	handleCheckboxChange: (id: string) => void;
 	selectedLaunches: string[];
 }
 
-export function LaunchView({ launch, handleCheckboxChange, selectedLaunches }: LaunchesViewProps) {
+// This is the component that shows the spaceX launch information
+export function LaunchView({ launchData, handleCheckboxChange, selectedLaunches }: LaunchesViewProps) {
 	const { user } = useAuth();
-	const missionImage = launch?.links?.flickr_images
 
-	if (!launch) return null;
+	const missionImage = launchData?.links?.flickr_images;
+	const rocket = launchData?.rocket?.rocket_name;
+	const costPerLaunch = launchData?.rocket?.rocket?.cost_per_launch;
+	const launchDate = new Date(launchData?.launch_date_local).toLocaleDateString();
+	const wikiPediaLink = launchData?.links?.wikipedia;
+	const redditCompaignLink = launchData?.links?.reddit_campaign;
+	const missionName = launchData?.mission_name;
+	const launchDetails = user?.role === 'admin' && launchData?.details;
+
+	if (!launchData) return null;
 
 	return (
-		<Grid item key={launch.id}>
+		<Grid item key={launchData.id}>
 			<SItem >
 				{missionImage && missionImage?.length > 0 && <CardMedia component='img' height='194' src={missionImage[1] || ''} alt='Mission Image' />}
 				<CardContent>
@@ -27,25 +36,25 @@ export function LaunchView({ launch, handleCheckboxChange, selectedLaunches }: L
 						icon={<RocketLaunchOutlinedIcon fontSize="large" />}
 						checkedIcon={<RocketLaunchIcon fontSize="large" />}
 						size="medium"
-						checked={launch.id ? selectedLaunches.includes(launch.id) : false}
+						checked={launchData.id ? selectedLaunches.includes(launchData.id) : false}
 						onChange={() => {
-							if (launch.id)
-								handleCheckboxChange(launch.id);
+							if (launchData.id)
+								handleCheckboxChange(launchData.id);
 							else
 								console.log('Launch id is undefined');
 						}}
 					/>
 					<Stack direction={'column'} spacing={'1rem'}>
-						<Typography><b>Mission:</b> {launch?.mission_name}</Typography>
+						<Typography><b>Mission:</b> {missionName}</Typography>
 
-						{user?.role === 'admin' && launch.details ? <Typography><b>Details:</b> {launch.details}</Typography> : null}
+						{launchDetails ? <Typography><b>Details:</b> {launchData.details}</Typography> : null}
 
-						<Typography><b>Rocket:</b> {launch?.rocket?.rocket_name}</Typography>
-						<Typography><b>Cost per launch:</b> {launch?.rocket?.rocket?.cost_per_launch}</Typography>
-						<Typography><b>Date Launched:</b> {new Date(launch.launch_date_local).toLocaleDateString()}</Typography>
+						<Typography><b>Rocket:</b> {rocket}</Typography>
+						<Typography><b>Cost per launch:</b> {costPerLaunch}</Typography>
+						<Typography><b>Date Launched:</b> {launchDate}</Typography>
 						<Stack direction={'row'} spacing={'1rem'} justifyContent={'center'}>
-							{launch?.links?.wikipedia && <SLink href={launch?.links?.wikipedia}> Wiki </SLink>}
-							{launch?.links?.reddit_campaign && <Link color={'inherit'} href={launch?.links?.reddit_campaign}><RedditIcon fontSize='large' /></Link>}
+							{wikiPediaLink && <SLink href={wikiPediaLink}> Wiki </SLink>}
+							{redditCompaignLink && <Link color={'inherit'} href={redditCompaignLink}><RedditIcon fontSize='large' /></Link>}
 						</Stack>
 					</Stack>
 				</CardContent>
@@ -55,7 +64,6 @@ export function LaunchView({ launch, handleCheckboxChange, selectedLaunches }: L
 }
 
 const SItem = styled(Card)(({ theme }) => ({
-	...theme.typography.body2,
 	backgroundColor: theme.palette.background.paper,
 	width: '20rem',
 	height: 'fit-content',
