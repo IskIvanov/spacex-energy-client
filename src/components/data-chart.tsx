@@ -11,7 +11,6 @@ type DataChartProprs = {
 	data: QueryQuery
 };
 
-
 export default function DataChart({ data }: DataChartProprs) {
 	const [lineData, setLineData] = useState<any>()
 
@@ -28,7 +27,7 @@ export default function DataChart({ data }: DataChartProprs) {
 						rocketMass,
 						fuelFirstStage,
 						fuelSecondStage,
-					)
+					) / (10 ** 6)
 				}
 			} else {
 				return null;
