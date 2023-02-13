@@ -15,8 +15,6 @@ type DataChartProprs = {
 export default function DataChart({ data }: DataChartProprs) {
 	const [lineData, setLineData] = useState<any>()
 
-	const { selectedLaunches } = useEnergyCalculation();
-
 	useEffect(() => {
 		const processedData = data?.launches?.map((launch) => {
 			// Launches without a rocket are not included in the chart
